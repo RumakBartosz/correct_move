@@ -6,6 +6,8 @@
 %% API functions
 %%====================================================================
 
+-spec available_moves(type:color(), type:tron_map()) -> [type:move()] | [].
+
 available_moves(Color, Map) ->
     up_valid(Color, Map) ++ down_valid(Color, Map) ++
         left_valid(Color, Map) ++ right_valid(Color, Map).
@@ -14,8 +16,12 @@ available_moves(Color, Map) ->
 %% Internal functions
 %%====================================================================
 
+-spec get_head(type:color(), type:tron_map()) -> type:coords().
+
 get_head(Color, Map) ->
     get_head(Color, Map, 1).
+
+-spec get_head(type:color(), type:tron_map(), type:coord_y()) -> type:coords().
 
 get_head(red, [], Acc) ->
     Acc;
@@ -31,6 +37,8 @@ get_head(blue, [Head|Rest], Acc) ->
         true -> {Acc, get_head_vertical(blue, Head, 1)};
         false -> get_head(blue, Rest, Acc + 1)
     end.
+
+-spec get_head_vertical(type:color(), type:tron_map(), type:coord_x()) -> type:coord_x().
 
 get_head_vertical(red, [], Acc) ->
     Acc;
@@ -48,12 +56,16 @@ get_head_vertical(blue, [Head|Rest], Acc) ->
     end.
 
 %TODO: Try to return atom instead
+-spec up_valid(type:color(), type:tron_map()) -> [type:move()] | [].
+
 up_valid(Color, Map) ->
     {Y, X} = get_head(Color, Map),
     case lists:nth(X, lists:nth(Y - 1, Map)) of
         $\s -> ["up\n"];
         _Otherwise -> []
     end.
+
+-spec down_valid(type:color(), type:tron_map()) -> [type:move()] | [].
 
 down_valid(Color, Map) ->
     {Y, X} = get_head(Color, Map),
@@ -62,12 +74,16 @@ down_valid(Color, Map) ->
         _Otherwise -> []
     end.
 
+-spec left_valid(type:color(), type:tron_map()) -> [type:move()] | [].
+
 left_valid(Color, Map) ->
     {Y, X} = get_head(Color, Map),
     case lists:nth(X - 1, lists:nth(Y, Map)) of
         $\s -> ["left\n"];
         _Otherwise -> []
     end.
+
+-spec right_valid(type:color(), type:tron_map()) -> [type:move()] | [].
 
 right_valid(Color, Map) ->
     {Y, X} = get_head(Color, Map),

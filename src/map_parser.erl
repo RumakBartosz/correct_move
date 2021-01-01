@@ -6,6 +6,8 @@
 %% API functions
 %%====================================================================
 
+-spec parse(string()) -> type:tron_map().
+
 parse(MapString) ->
     Numbered = sub_numbers(MapString),
     break_map(Numbered).
@@ -14,14 +16,20 @@ parse(MapString) ->
 %% Internal functions
 %%====================================================================
 
+-spec break_map(string()) -> type:tron_map().
+
 break_map(MapString) ->
     string:split(MapString, "/", all).
+
+-spec numbers_to_spaces(nonempty_string()) -> string().
 
 numbers_to_spaces(Number) ->
     Numberized = list_to_integer(Number),
     string:copies(" ", Numberized).
 
 %% guard means that Char is a number
+-spec sub_numbers(string()) -> string().
+
 sub_numbers([]) ->
     [];
 sub_numbers([Head | Rest]) when (Head >= 48 andalso Head =< 57) ->

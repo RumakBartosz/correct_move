@@ -1,17 +1,25 @@
 -module(type).
 
--export_type([color/0, move/0, message/0, tile/0]).
+-export_type([color/0, move/0, message/0, tron_map/0, coord_x/0, coord_y/0, coords/0]).
 
 %%====================================================================
 %% Type definitions
 %%====================================================================
 
--opaque message() :: string().
+-type message() :: string().
 
 %TODO: Can this be an atom?
--opaque tile() :: $o | $\s | $r | $b | $R | $B.
+-type tile() :: $o | $\s | $r | $b | $R | $B.
 
--opaque color() :: blue | red.
+-type color() :: blue | red.
 
 %TODO: Try to restrict type to "up\n" | "down\n" | "left\n" | "right\n"
--opaque move() :: string().
+-type move() :: string().
+
+-type tron_map() :: [[tile()]].
+
+-type coord_x() :: byte().
+
+-type coord_y() :: byte().
+
+-type coords() :: {coord_x(), coord_y()}.

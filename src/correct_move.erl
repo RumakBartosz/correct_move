@@ -2,11 +2,16 @@
 
 -export([main/1]).
 
+-ignore_xref([main/1]).
+%TODO: change main to "message receive" function
+
 %%====================================================================
 %% API functions
 %%====================================================================
 
 %% escript Entry point
+-spec main([string()]) -> no_return().
+
 main(_Args) ->
     io:format(answerer:answer_interface(io:get_line(""))),
     io:format(answerer:answer_version(io:get_line(""))),
@@ -21,6 +26,8 @@ main(_Args) ->
 %%====================================================================
 %% Internal functions
 %%====================================================================
+
+-spec loop(type:color()) -> no_return().
 
 loop(Color) ->
     io:format(answerer:answer_move(Color,
