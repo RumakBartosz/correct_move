@@ -1,10 +1,18 @@
 -module(map_parser).
+
 -export([parse/1]).
-%TODO: add tests
+
+%%====================================================================
+%% API functions
+%%====================================================================
 
 parse(MapString) ->
     Numbered = sub_numbers(MapString),
     break_map(Numbered).
+
+%%====================================================================
+%% Internal functions
+%%====================================================================
 
 break_map(MapString) ->
     string:split(MapString, "/", all).

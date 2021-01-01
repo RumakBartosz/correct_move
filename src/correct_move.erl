@@ -12,7 +12,7 @@ main(_Args) ->
     io:format(answerer:answer_version(io:get_line(""))),
 
     %TODO: Improve color handling
-    {Color, _} = answerer:answer_color(io:get_line("")),
+    {ok, Color} = answerer:answer_color(io:get_line("")),
     io:format("color ok\n"),
 
     loop(Color),

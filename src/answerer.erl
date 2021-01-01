@@ -6,6 +6,10 @@
          answer_move/2]).
 
 
+%%====================================================================
+%% API functions
+%%====================================================================
+
 answer_interface("tbi\n") ->
     "tbi ok\n".
 
@@ -16,9 +20,9 @@ answer_version("tbi v1\n") ->
 %TODO: add tests
 %TODO: work on atoms instead of strings
 answer_color("color blue\n") ->
-    {"blue", "color ok"};
+    {ok, blue};
 answer_color("color red\n") ->
-    {"red", "color ok"}.
+    {ok, red}.
 
 answer_move(Color, Map) ->
     rand_bot:choose_move(Color, Map).
