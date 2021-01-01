@@ -1,6 +1,6 @@
 {application, correct_move,
  [{description, "TronBot escript application"},
-  {vsn, "0.1.0"},
+  {vsn, "0.1.1"},
   {registered, []},
   {applications,
    [kernel,
