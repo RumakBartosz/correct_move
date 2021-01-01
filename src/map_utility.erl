@@ -47,7 +47,7 @@ get_head_vertical(blue, [Head|Rest], Acc) ->
         false -> get_head_vertical(blue, Rest, Acc + 1)
     end.
 
-
+%TODO: Try to return atom instead
 up_valid(Color, Map) ->
     {Y, X} = get_head(Color, Map),
     case lists:nth(X, lists:nth(Y - 1, Map)) of
