@@ -1,6 +1,7 @@
 -module(map_utility).
 
--export([available_moves/2]).
+-export([available_moves/2,
+         print_map/1]).
 
 %%====================================================================
 %% API functions
@@ -11,6 +12,11 @@
 available_moves(Color, Map) ->
     lists:append([up_valid(Color, Map), down_valid(Color, Map),
         left_valid(Color, Map), right_valid(Color, Map)]).
+
+-spec print_map(type:tron_map()) -> ok.
+
+print_map(Map) ->
+    print_map(Map, []).
 
 %%====================================================================
 %% Internal functions
@@ -90,3 +96,12 @@ right_valid(Color, Map) ->
         $\s -> [right];
         _Otherwise -> []
     end.
+
+-spec print_map(type:tron_map(), list()) -> ok.
+
+print_map([], Acc) ->
+    io:format("~n"),
+    io:format(lists:reverse(Acc)),
+    io:format("~n");
+print_map([Head | Rest], Acc) ->
+    print_map(Rest, [["  " ++ Head ++ "\n"] | Acc]).
