@@ -15,8 +15,10 @@ available_moves(Color, Map) ->
 
 -spec print_map(type:tron_map()) -> ok.
 
-print_map(Map) ->
-    print_map(Map, []).
+print_map([Head | _Rest] = Map) when is_list(Head) ->
+    print_map(Map, [], map);
+print_map([Head | _Rest] = Map) when is_number(Head) ->
+    print_map(Map, [], map_string).
 
 %%====================================================================
 %% Internal functions
@@ -97,11 +99,14 @@ right_valid(Color, Map) ->
         _Otherwise -> []
     end.
 
--spec print_map(type:tron_map(), list()) -> ok.
+-spec print_map(type:tron_map(), list(), atom()) -> ok.
 
-print_map([], Acc) ->
+print_map([], Acc, map) ->
     io:format("~n"),
     io:format(lists:reverse(Acc)),
     io:format("~n");
-print_map([Head | Rest], Acc) ->
-    print_map(Rest, [["  " ++ Head ++ "\n"] | Acc]).
+print_map([Head | Rest], Acc, map) ->
+    print_map(Rest, [["  " ++ Head ++ "\n"] | Acc], map);
+print_map(MapString, Acc, map_string) ->
+    print_map(map_parser:parse(MapString), Acc, map).
+
