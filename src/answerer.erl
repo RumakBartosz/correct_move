@@ -1,12 +1,32 @@
 -module(answerer).
 
--export([answer_interface/1,
-         answer_version/1,
-         answer_color/1,
-         answer_move/2]).
+-export([answer/1,
+         answer/2]).
 
 %%====================================================================
 %% API functions
+%%====================================================================
+
+-spec answer(atom()) -> ok | {ok, type:color()}.
+
+answer(interface) ->
+    ok = io:format(answer_interface(io:get_line("")));
+answer(version) ->
+    ok = io:format(answer_version(io:get_line("")));
+answer(color) ->
+    {ok, Color} = answer_color(io:get_line("")),
+    io:format("color ok\n"),
+    {ok, Color}.
+
+-spec answer(atom(), type:color()) -> ok.
+
+answer(move, Color) ->
+    ok = io:format(answer_move(Color,
+                   map_parser:parse(lists:nth(2, string:split(io:get_line(""), " "))))),
+    ok = io:format("~n").
+
+%%====================================================================
+%% Internal functions
 %%====================================================================
 
 -spec answer_interface(type:message()) -> type:message().

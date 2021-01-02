@@ -30,15 +30,13 @@ numbers_to_spaces(Number) ->
 %% guard means that Char is a number
 -spec sub_numbers(string()) -> string().
 
-sub_numbers([]) ->
-    [];
-sub_numbers([Head | Rest]) when (Head >= 48 andalso Head =< 57) ->
-    Second = lists:nth(1, Rest),
-    %TODO: check if there is better lists handlind method
+sub_numbers("") ->
+    "";
+sub_numbers([Head, Second | Rest]) when (Head >= 48 andalso Head =< 57) ->
     case Second >= 48 andalso Second =< 57 of
-        true -> [numbers_to_spaces([Head, Second])] ++ sub_numbers(Rest -- [Second]);
-        false -> [numbers_to_spaces([Head]), Second] ++ sub_numbers(Rest -- [Second])
+        true -> [numbers_to_spaces([Head, Second])] ++ sub_numbers(Rest);
+        false -> [numbers_to_spaces([Head]), Second] ++ sub_numbers(Rest)
     end;
 sub_numbers([Head | Rest]) ->
-    [Head] ++ sub_numbers(Rest).
+    [Head | sub_numbers(Rest)].
 

@@ -13,8 +13,7 @@
 
 -type color() :: blue | red.
 
-%TODO: Try to restrict type to "up\n" | "down\n" | "left\n" | "right\n"
--type move() :: string().
+-type move() :: up | down | left | right.
 
 -type tron_map() :: [[tile()]].
 

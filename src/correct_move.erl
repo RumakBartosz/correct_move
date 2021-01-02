@@ -3,7 +3,6 @@
 -export([main/1]).
 
 -ignore_xref([main/1]).
-%TODO: change main to "message receive" function
 
 %%====================================================================
 %% API functions
@@ -13,15 +12,11 @@
 -spec main([string()]) -> no_return().
 
 main(_Args) ->
-    io:format(answerer:answer_interface(io:get_line(""))),
-    io:format(answerer:answer_version(io:get_line(""))),
+    answerer:answer(interface),
+    answerer:answer(version),
+    {ok, Color} = answerer:answer(color),
 
-    {ok, Color} = answerer:answer_color(io:get_line("")),
-    io:format("color ok\n"),
-
-    loop(Color),
-
-    erlang:halt(0).
+    loop(Color).
 
 %%====================================================================
 %% Internal functions
@@ -30,6 +25,5 @@ main(_Args) ->
 -spec loop(type:color()) -> no_return().
 
 loop(Color) ->
-    io:format(answerer:answer_move(Color,
-              map_parser:parse(lists:nth(2, string:split(io:get_line(""), " "))))),
+    answerer:answer(move, Color),
     loop(Color).

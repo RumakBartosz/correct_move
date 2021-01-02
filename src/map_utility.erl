@@ -9,8 +9,8 @@
 -spec available_moves(type:color(), type:tron_map()) -> [type:move()] | [].
 
 available_moves(Color, Map) ->
-    up_valid(Color, Map) ++ down_valid(Color, Map) ++
-        left_valid(Color, Map) ++ right_valid(Color, Map).
+    lists:append([up_valid(Color, Map), down_valid(Color, Map),
+        left_valid(Color, Map), right_valid(Color, Map)]).
 
 %%====================================================================
 %% Internal functions
@@ -55,13 +55,12 @@ get_head_vertical(blue, [Head|Rest], Acc) ->
         false -> get_head_vertical(blue, Rest, Acc + 1)
     end.
 
-%TODO: Try to return atom instead
 -spec up_valid(type:color(), type:tron_map()) -> [type:move()] | [].
 
 up_valid(Color, Map) ->
     {Y, X} = get_head(Color, Map),
     case lists:nth(X, lists:nth(Y - 1, Map)) of
-        $\s -> ["up\n"];
+        $\s -> [up];
         _Otherwise -> []
     end.
 
@@ -70,7 +69,7 @@ up_valid(Color, Map) ->
 down_valid(Color, Map) ->
     {Y, X} = get_head(Color, Map),
     case lists:nth(X, lists:nth(Y + 1, Map)) of
-        $\s -> ["down\n"];
+        $\s -> [down];
         _Otherwise -> []
     end.
 
@@ -79,7 +78,7 @@ down_valid(Color, Map) ->
 left_valid(Color, Map) ->
     {Y, X} = get_head(Color, Map),
     case lists:nth(X - 1, lists:nth(Y, Map)) of
-        $\s -> ["left\n"];
+        $\s -> [left];
         _Otherwise -> []
     end.
 
@@ -88,6 +87,6 @@ left_valid(Color, Map) ->
 right_valid(Color, Map) ->
     {Y, X} = get_head(Color, Map),
     case lists:nth(X + 1, lists:nth(Y, Map)) of
-        $\s -> ["right\n"];
+        $\s -> [right];
         _Otherwise -> []
     end.
