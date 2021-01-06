@@ -1,7 +1,8 @@
 -module(map_utility).
 
 -export([available_moves/2,
-         print_map/1]).
+         print_map/1,
+         get_head/2]).
 
 %%====================================================================
 %% API functions
@@ -20,14 +21,14 @@ print_map([Head | _Rest] = Map) when is_list(Head) ->
 print_map([Head | _Rest] = Map) when is_number(Head) ->
     print_map(Map, [], map_string).
 
-%%====================================================================
-%% Internal functions
-%%====================================================================
-
 -spec get_head(type:color(), type:tron_map()) -> type:coords().
 
 get_head(Color, Map) ->
     get_head(Color, Map, 1).
+
+%%====================================================================
+%% Internal functions
+%%====================================================================
 
 -spec get_head(type:color(), type:tron_map(), type:coord_y()) -> type:coords().
 
