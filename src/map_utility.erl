@@ -36,14 +36,14 @@ get_head(red, [], Acc) ->
     Acc;
 get_head(red, [Head|Rest], Acc) ->
     case lists:member($R, Head) of
-        true -> {Acc, get_head_vertical(red, Head, 1)};
+        true -> {get_head_vertical(red, Head, 1), Acc};
         false -> get_head(red, Rest, Acc + 1)
     end;
 get_head(blue, [], Acc) ->
     Acc;
 get_head(blue, [Head|Rest], Acc) ->
     case lists:member($B, Head) of
-        true -> {Acc, get_head_vertical(blue, Head, 1)};
+        true -> {get_head_vertical(blue, Head, 1), Acc};
         false -> get_head(blue, Rest, Acc + 1)
     end.
 
@@ -67,7 +67,7 @@ get_head_vertical(blue, [Head|Rest], Acc) ->
 -spec up_valid(type:color(), type:tron_map()) -> [type:move()] | [].
 
 up_valid(Color, Map) ->
-    {Y, X} = get_head(Color, Map),
+    {X, Y} = get_head(Color, Map),
     case lists:nth(X, lists:nth(Y - 1, Map)) of
         $\s -> [up];
         _Otherwise -> []
@@ -76,7 +76,7 @@ up_valid(Color, Map) ->
 -spec down_valid(type:color(), type:tron_map()) -> [type:move()] | [].
 
 down_valid(Color, Map) ->
-    {Y, X} = get_head(Color, Map),
+    {X, Y} = get_head(Color, Map),
     case lists:nth(X, lists:nth(Y + 1, Map)) of
         $\s -> [down];
         _Otherwise -> []
@@ -85,7 +85,7 @@ down_valid(Color, Map) ->
 -spec left_valid(type:color(), type:tron_map()) -> [type:move()] | [].
 
 left_valid(Color, Map) ->
-    {Y, X} = get_head(Color, Map),
+    {X, Y} = get_head(Color, Map),
     case lists:nth(X - 1, lists:nth(Y, Map)) of
         $\s -> [left];
         _Otherwise -> []
@@ -94,7 +94,7 @@ left_valid(Color, Map) ->
 -spec right_valid(type:color(), type:tron_map()) -> [type:move()] | [].
 
 right_valid(Color, Map) ->
-    {Y, X} = get_head(Color, Map),
+    {X, Y} = get_head(Color, Map),
     case lists:nth(X + 1, lists:nth(Y, Map)) of
         $\s -> [right];
         _Otherwise -> []

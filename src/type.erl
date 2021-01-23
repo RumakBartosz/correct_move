@@ -17,8 +17,8 @@
 
 -type tron_map() :: [[tile()]].
 
--type coord_x() :: byte().
+-type coord_x() :: pos_integer().
 
--type coord_y() :: byte().
+-type coord_y() :: pos_integer().
 
 -type coords() :: {coord_x(), coord_y()}.

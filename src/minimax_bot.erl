@@ -8,68 +8,49 @@
 %% API functions
 %%====================================================================
 
-%choose_move(_Map, _Color) ->
+%=spec which_move_shall_i_take(type:tron_map(), type:color()) -> type:move().
+
+%which_move_shall_i_take(_Map, _Color) ->
 %    ok.
 
 %%====================================================================
 %% Internal functions
 %%====================================================================
 
-%minimize(_Color, _Map) ->
-%    ok.
 
-%maximize(_Color, _Map) ->
-%    ok.
+%TODO: As negamax should return one value, change it to foldl eg.
+-spec negamax(type:color(), type:tron_map(), byte(), integer()) -> [integer()].
 
-%which_move_shall_i_take(_Color, _Map) ->
-%    ok.
-
--spec game_over(type:color(), type:tron_map()) -> boolean().
-
-game_over(Color, Map) ->
-    map_utility:available_moves(Color, Map) =:= [].
-
--spec make_move(type:tron_map(), type:color(), type:move()) -> type:tron_map().
-
-make_move(Map, red, Move) ->
-    {X, Y} = map_utility:get_head(red, Map),
-    case Move of
-        up ->
-            Altered = alter_map(Map, "R", {X, Y - 1}),
-            alter_map(Altered, "r", {X, Y});
-        down ->
-            Altered = alter_map(Map, "R", {X, Y + 1}),
-            alter_map(Altered, "r", {X, Y});
-        left ->
-            Altered = alter_map(Map, "R", {X - 1, Y}),
-            alter_map(Altered, "r", {X, Y});
-        right ->
-            Altered = alter_map(Map, "R", {X + 1, Y}),
-            alter_map(Altered, "r", {X, Y})
+negamax(Color, Map, 0, Acc) ->
+    case (Eval = evaluate(Color, Map)) < Acc of
+        true -> [Eval];
+        false -> [Acc]
     end;
-make_move(Map, blue, Move) ->
-    {X, Y} = map_utility:get_head(blue, Map),
-    case Move of
-        up ->
-            Altered = alter_map(Map, "B", {X, Y - 1}),
-            alter_map(Altered, "b", {X, Y});
-        down ->
-            Altered = alter_map(Map, "B", {X, Y + 1}),
-            alter_map(Altered, "b", {X, Y});
-        left ->
-            Altered = alter_map(Map, "B", {X - 1, Y}),
-            alter_map(Altered, "b", {X, Y});
-        right ->
-            Altered = alter_map(Map, "B", {X + 1, Y}),
-            alter_map(Altered, "b", {X, Y})
+negamax(Color, Map, Depth, Acc) ->
+    GoDeeper = fun(Move) ->
+                   map_utility:print_map(bot_utility:make_move(Map, Color, Move)),
+                   Evaluation = lists:map(fun erlang:'-'/1,
+                                          negamax(bot_utility:negate_color(Color),
+                                                  bot_utility:make_move(Map, Color, Move),
+                                                  Depth - 1,
+                                                  Acc)
+                                         ),
+                   case Evaluation < Acc of
+                       true -> Evaluation;
+                       false -> Acc
+                   end
+               end,
+    case bot_utility:game_over(Color, Map) of
+        true -> negamax(Color, Map, 0, Acc);
+        false ->
+            lists:map(GoDeeper, map_utility:available_moves(Color,Map))
     end.
 
--spec alter_map(type:tron_map(), string(), type:coords()) -> type:tron_map().
+-spec evaluate(type:color(), type:tron_map()) -> integer().
 
-alter_map(Map, Tile, {X, Y}) ->
-    lists:sublist(Map, Y - 1) ++ [alter_vertical(lists:nth(Y, Map), Tile, X)] ++ lists:nthtail(Y, Map).
+evaluate(Color, Map) ->
+    case bot_utility:game_over(Color, Map) of
+        true -> -1000;
+        false -> 1000
+    end.
 
--spec alter_vertical(string(), string(), integer()) -> string().
-
-alter_vertical(Row, Tile, X) ->
-    lists:sublist(Row, X - 1) ++ Tile ++ lists:nthtail(X, Row).

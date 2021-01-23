@@ -16,7 +16,7 @@ parse(MapString) ->
 %% Internal functions
 %%====================================================================
 
--spec break_map(string()) -> type:tron_map().
+-spec break_map(string()) -> [string()].
 
 break_map(MapString) ->
     string:split(MapString, "/", all).
