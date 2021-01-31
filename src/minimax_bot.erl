@@ -19,9 +19,10 @@
 
 
 %TODO: As negamax should return one value, change it to foldl eg.
+%TODO: Problem with passing Acc value, not traversing.
 -spec negamax(type:color(), type:tron_map(), byte(), integer()) -> [integer()].
 
-negamax(Color, Map, 0, Acc) ->
+negamax(Color, Map, 0, Acc ) ->
     case (Eval = evaluate(Color, Map)) < Acc of
         true -> [Eval];
         false -> [Acc]
@@ -43,7 +44,7 @@ negamax(Color, Map, Depth, Acc) ->
     case bot_utility:game_over(Color, Map) of
         true -> negamax(Color, Map, 0, Acc);
         false ->
-            lists:map(GoDeeper, map_utility:available_moves(Color,Map))
+            lists:map(GoDeeper, map_utility:available_moves(Color, Map))
     end.
 
 -spec evaluate(type:color(), type:tron_map()) -> integer().

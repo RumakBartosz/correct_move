@@ -10,24 +10,34 @@
 -spec answer(atom()) -> ok | {ok, type:color()}.
 
 answer(interface) ->
-    ok = io:format(answer_interface(io:get_line("")));
+    send_message(answer_interface(receive_message()));
 answer(version) ->
-    ok = io:format(answer_version(io:get_line("")));
+    send_message(answer_version(receive_message()));
 answer(color) ->
-    {ok, Color} = answer_color(io:get_line("")),
-    io:format("color ok\n"),
+    {ok, Color} = answer_color(receive_message()),
+    send_message("color ok\n"),
     {ok, Color}.
 
 -spec answer(atom(), type:color()) -> ok.
 
 answer(move, Color) ->
-    ok = io:format(answer_move(Color,
+    send_message(answer_move(Color,
                    map_parser:parse(lists:nth(2, string:split(io:get_line(""), " "))))),
-    ok = io:format("~n").
+    send_message("~n").
 
 %%====================================================================
 %% Internal functions
 %%====================================================================
+
+-spec send_message(string()) -> 'ok'.
+
+send_message(IO) ->
+    ok = io:format(IO).
+
+-spec receive_message() -> 'eof' | binary() | string() | {'error', _}.
+
+receive_message() ->
+    io:get_line("").
 
 -spec answer_interface(type:message()) -> type:message().
 
