@@ -27,12 +27,11 @@ numbers_to_spaces(Number) ->
     Numberized = list_to_integer(Number),
     string:copies(" ", Numberized).
 
-%% guard means that Char is a number
 -spec sub_numbers(string()) -> string().
 
 sub_numbers("") ->
     "";
-sub_numbers([Head, Second | Rest]) when (Head >= 48 andalso Head =< 57) ->
+sub_numbers([Head, Second | Rest]) when (Head >= $0 andalso Head =< $9) ->
     case Second >= 48 andalso Second =< 57 of
         true -> [numbers_to_spaces([Head, Second])] ++ sub_numbers(Rest);
         false -> [numbers_to_spaces([Head]), Second] ++ sub_numbers(Rest)

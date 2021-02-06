@@ -21,8 +21,8 @@ answer(color) ->
 -spec answer(atom(), type:color()) -> ok.
 
 answer(move, Color) ->
-    send_message(answer_move(Color,
-                   map_parser:parse(lists:nth(2, string:split(io:get_line(""), " "))))),
+    ["move" | MoveString] = string:split(receive_message(), " "),
+    send_message(answer_move(Color, map_parser:parse(MoveString))),
     send_message("~n").
 
 %%====================================================================
@@ -60,3 +60,4 @@ answer_color("color red\n") ->
 
 answer_move(Color, Map) ->
     rand_bot:choose_move(Color, Map).
+
