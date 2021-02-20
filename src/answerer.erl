@@ -21,7 +21,7 @@ answer(color) ->
 -spec answer(atom(), type:color()) -> ok.
 
 answer(move, Color) ->
-    ["move" | MoveString] = string:split(receive_message(), " "),
+    ["move", MoveString] = string:split(receive_message(), " "),
     send_message(answer_move(Color, map_parser:parse(MoveString))),
     send_message("~n").
 
@@ -29,12 +29,12 @@ answer(move, Color) ->
 %% Internal functions
 %%====================================================================
 
--spec send_message(string()) -> 'ok'.
+-spec send_message(string() | type:move()) -> 'ok'.
 
 send_message(IO) ->
     ok = io:format(IO).
 
--spec receive_message() -> 'eof' | binary() | string() | {'error', _}.
+-spec receive_message() -> type:message().
 
 receive_message() ->
     io:get_line("").

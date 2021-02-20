@@ -8,10 +8,25 @@
 %% API functions
 %%====================================================================
 
-%-spec which_move_shall_i_take(type:tron_map(), type:color()) -> type:move().
+-spec which_move_shall_i_take(type:tron_map(), type:color(), byte()) -> {type:move(), integer()}.
 
-%which_move_shall_i_take(_Map, _Color) ->
-%    ok.
+which_move_shall_i_take(Map, Color, Depth) ->
+    map_utility:print_map(Map),
+    % Helper function for mapping on all moves
+    MoveFun = fun(Move) ->
+                        -negamax(bot_utility:negate_color(Color),
+                                bot_utility:make_move(Map, Color, Move),
+                                Depth - 1,
+                                0)
+                end,
+
+    % Main function, returning lowest value in subtree
+    Moves = map_utility:available_moves(Color, Map),
+    LowerValues = lists:map(MoveFun, Moves),
+    MovesAndValues = lists:zip(Moves, LowerValues),
+    TupleMinimum = fun({Move, Value}, {_AccMove, AccVal}) when Value > AccVal -> {Move, Value};
+                      ({_Move, _Value}, {AccMove, AccVal}) -> {AccMove, AccVal} end,
+    lists:foldl(TupleMinimum, {-1000, up}, MovesAndValues).
 
 %%====================================================================
 %% Internal functions

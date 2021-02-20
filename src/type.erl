@@ -6,7 +6,7 @@
 %% Type definitions
 %%====================================================================
 
--type message() :: string().
+-type message() :: string() | move().
 
 %TODO: Can this be an atom?
 -type tile() :: $o | $\s | $r | $b | $R | $B.
