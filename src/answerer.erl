@@ -59,5 +59,5 @@ answer_color("color red\n") ->
 -spec answer_move(type:color(), type:tron_map()) -> type:move().
 
 answer_move(Color, Map) ->
-    rand_bot:choose_move(Color, Map).
+    minimax_bot:choose_move(Color, Map).
 

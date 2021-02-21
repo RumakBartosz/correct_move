@@ -21,7 +21,6 @@ choose_move(Color, Map) ->
 -spec which_move_shall_i_take(type:tron_map(), type:color(), byte()) -> {type:move(), integer()}.
 
 which_move_shall_i_take(Map, Color, Depth) ->
-    map_utility:print_map(Map),
     % Helper function for mapping on all moves
     MoveFun = fun(Move) ->
                       -negamax(bot_utility:negate_color(Color),
