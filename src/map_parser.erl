@@ -16,23 +16,25 @@ parse(MapString) ->
 %% Internal functions
 %%====================================================================
 
--spec break_map(string()) -> [string()].
+-spec break_map(string()) -> type:tron_map().
 
 break_map(MapString) ->
     string:split(MapString, "/", all).
 
--spec numbers_to_spaces(nonempty_string()) -> string().
+
+-spec numbers_to_spaces(string()) -> string().
 
 numbers_to_spaces(Number) ->
     Numberized = list_to_integer(Number),
     string:copies(" ", Numberized).
+
 
 -spec sub_numbers(string()) -> string().
 
 sub_numbers("") ->
     "";
 sub_numbers([Head, Second | Rest]) when (Head >= $0 andalso Head =< $9) ->
-    case Second >= 48 andalso Second =< 57 of
+    case Second >= $0 andalso Second =< $9 of
         true -> [numbers_to_spaces([Head, Second])] ++ sub_numbers(Rest);
         false -> [numbers_to_spaces([Head]), Second] ++ sub_numbers(Rest)
     end;

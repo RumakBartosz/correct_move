@@ -1,6 +1,6 @@
 -module(type).
 
--export_type([color/0, move/0, message/0, tron_map/0, coord_x/0, coord_y/0, coords/0]).
+-export_type([color/0, move/0, message/0, tron_map/0, position/0, coord/0]).
 
 %%====================================================================
 %% Type definitions
@@ -17,8 +17,6 @@
 
 -type tron_map() :: [[tile()]].
 
--type coord_x() :: pos_integer().
+-type coord() :: pos_integer().
 
--type coord_y() :: pos_integer().
-
--type coords() :: {coord_x(), coord_y()}.
+-type position() :: {coord(), coord()}.

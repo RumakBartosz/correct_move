@@ -1,8 +1,9 @@
 -module(minimax_bot).
--compile([export_all]).
--compile([nowarn_export_all]).
 
--define(DEFAULT_DEPTH, 9).
+-export([choose_move/2]).
+
+
+-define(DEFAULT_DEPTH, 7).
 
 %%====================================================================
 %% API functions
@@ -18,55 +19,91 @@ choose_move(Color, Map) ->
 %% Internal functions
 %%====================================================================
 
--spec which_move_shall_i_take(type:tron_map(), type:color(), byte()) -> {type:move(), integer()}.
+-spec which_move_shall_i_take(type:tron_map(), type:color(), integer()) -> {type:move(), integer()}.
 
 which_move_shall_i_take(Map, Color, Depth) ->
     % Helper function for mapping on all moves
     MoveFun = fun(Move) ->
-                      -negamax(bot_utility:negate_color(Color),
-                               bot_utility:make_move(Map, Color, Move),
-                               Depth - 1,
-                               0)
+                     maximize(Color, bot_utility:make_move(Map, Color, Move), Depth, Color)
               end,
 
     % Main function, returning lowest value in subtree
     Moves = map_utility:available_moves(Color, Map),
     LowerValues = lists:map(MoveFun, Moves),
     MovesAndValues = lists:zip(Moves, LowerValues),
-    TupleMinimum = fun({Move, Value}, {_AccMove, AccVal}) when Value > AccVal -> {Move, Value};
+    TupleMaximum = fun({Move, Value}, {_AccMove, AccVal}) when Value > AccVal -> {Move, Value};
                       ({_Move, _Value}, {AccMove, AccVal}) -> {AccMove, AccVal} end,
-    lists:foldl(TupleMinimum, {up, -1000}, MovesAndValues).
+    lists:foldl(TupleMaximum, {up, -1001}, MovesAndValues).
 
--spec negamax(type:color(), type:tron_map(), byte(), integer()) -> integer().
 
-negamax(Color, Map, 0, Acc) ->
-    case (Eval = evaluate(Color, Map)) < Acc of
-        true -> Eval;
-        false -> Acc
-    end;
-negamax(Color, Map, Depth, Acc) ->
+-spec maximize(type:color(), type:tron_map(), integer(), type:color()) -> integer().
+
+maximize(Color, Map, 0, MyColor) ->
+    map_utility:write_map(Map),
+    Eval = evaluation:evaluate(MyColor, Map),
+    file:write_file("test.txt" ++ atom_to_list(Color),
+                    "Eval from depth maximize: " ++
+                     integer_to_list(Eval) ++
+                     io_lib:nl(), [append]),
+    Eval;
+maximize(Color, Map, Depth, MyColor) ->
     case bot_utility:game_over(Color, Map) of
-        true -> -negamax(Color, Map, 0, Acc);
+        true ->
+            map_utility:write_map(Map),
+            Eval = evaluation:evaluate(MyColor, Map),
+            file:write_file("test.txt" ++ atom_to_list(Color),
+                            "Eval from end maximize: " ++
+                             integer_to_list(Eval) ++
+                             io_lib:nl(), [append]),
+            Eval;
         false ->
             % Helper function for mapping on all moves
             MoveFun = fun(Move) ->
-                          -negamax(bot_utility:negate_color(Color),
+                          minimize(bot_utility:negate_color(Color),
                                    bot_utility:make_move(Map, Color, Move),
                                    Depth - 1,
-                                   Acc)
+                                   MyColor)
+                    end,
+
+            % Main function, returning lowest value in subtree
+            Moves = map_utility:available_moves(Color, Map),
+            LowerValues = lists:map(MoveFun, Moves),
+            lists:max(LowerValues)
+    end.
+
+
+-spec minimize(type:color(), type:tron_map(), integer(), type:color()) -> integer().
+
+minimize(Color, Map, 0, MyColor) ->
+    map_utility:write_map(Map),
+    Eval = evaluation:evaluate(MyColor, Map),
+    file:write_file("test.txt" ++ atom_to_list(Color),
+                    "Eval from depth minimize: " ++
+                     integer_to_list(Eval) ++
+                     io_lib:nl(), [append]),
+    Eval;
+minimize(Color, Map, Depth, MyColor) ->
+    case bot_utility:game_over(Color, Map) of
+        true ->
+            map_utility:write_map(Map),
+            Eval = evaluation:evaluate(MyColor, Map),
+            file:write_file("test.txt" ++ atom_to_list(Color),
+                            "Eval from end minimize: " ++
+                             integer_to_list(Eval) ++
+                             io_lib:nl(), [append]),
+            Eval;
+        false ->
+            % Helper function for mapping on all moves
+            MoveFun = fun(Move) ->
+                          maximize(bot_utility:negate_color(Color),
+                                   bot_utility:make_move(Map, Color, Move),
+                                   Depth - 1,
+                                   MyColor)
                     end,
 
             % Main function, returning lowest value in subtree
             Moves = map_utility:available_moves(Color, Map),
             LowerValues = lists:map(MoveFun, Moves),
             lists:min(LowerValues)
-    end.
-
--spec evaluate(type:color(), type:tron_map()) -> integer().
-
-evaluate(Color, Map) ->
-    case bot_utility:game_over(Color, Map) of
-        true -> -1000;
-        false -> 1000
     end.
 

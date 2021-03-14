@@ -64,14 +64,14 @@ unmake_move(Map, Color, Move) ->
 %% Internal functions
 %%====================================================================
 
--spec alter_map(type:tron_map(), string(), type:coords()) -> type:tron_map().
+-spec alter_map(type:tron_map(), string(), type:position()) -> type:tron_map().
 
 alter_map(Map, Tile, {X, Y}) ->
     lists:sublist(Map, Y - 1) ++
     [alter_vertical(lists:nth(Y, Map), Tile, X)] ++
     lists:nthtail(Y, Map).
 
--spec alter_vertical(string(), string(), integer()) -> string().
+-spec alter_vertical(string(), string(), type:coord()) -> string().
 
 alter_vertical(Row, Tile, X) ->
     lists:sublist(Row, X - 1) ++ Tile ++ lists:nthtail(X, Row).
