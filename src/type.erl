@@ -1,6 +1,6 @@
 -module(type).
 
--export_type([color/0, move/0, message/0, tron_map/0, position/0, coord/0]).
+-export_type([color/0, move/0, message/0, tron_map/0, position/0, coord/0, tile/0]).
 
 %%====================================================================
 %% Type definitions
