@@ -1,6 +1,8 @@
 -module(evaluation).
 
 -export([evaluate/2]).
+-compile(export_all).
+-compile(nowarn_export_all).
 
 %%====================================================================
 %% API functions
@@ -27,39 +29,43 @@ evaluate(MyColor, Map) ->
 -spec get_distance(type:position(), type:position()) -> integer().
 
 get_distance({Xone, Yone}, {Xtwo, Ytwo}) ->
-    (Xone - Xtwo) + (Yone - Ytwo).
+    abs((Xone - Xtwo) + (Yone - Ytwo)).
 
 
 % start with bruteforce, for every element of map count distance to two heads.
 -spec count_closer(type:tron_map()) -> [{blue | red, integer()}, ...].
 
 count_closer(Map) ->
-    count_closer(Map, [{blue, 0}, {red, 0}], 1).
+    BlueHead = map_utility:get_head(blue, Map),
+    RedHead = map_utility:get_head(red, Map),
+    count_closer(Map, BlueHead, RedHead, [{blue, 0}, {red, 0}], 1).
 
 
--spec count_closer(type:tron_map(), CloserCounter, integer()) ->
+-spec count_closer(type:tron_map(), type:position(), type:position(), CloserCounter, integer()) ->
                   CloserCounter when CloserCounter :: [{blue | red, integer()}, ...].
 
 % TODO: Both functions to refactor
-count_closer([], Acc, _VerticalAcc) ->
+count_closer([], _BlueHead, _RedHead, Acc, _VerticalAcc) ->
     Acc;
-count_closer([Row|Rest] = Map, [{blue, CloserBlue}, {red, CloserRed}], VerticalAcc) ->
-    BlueHead = map_utility:get_head(blue, Map),
-    RedHead = map_utility:get_head(red, Map),
+count_closer([Row|Rest], BlueHead, RedHead, [{blue, CloserBlue}, {red, CloserRed}], VerticalAcc) ->
     [{blue, RowBlue}, {red, RowRed}] = count_closer_vertical(Row,
                                                              BlueHead,
                                                              RedHead,
                                                              {1, VerticalAcc},
                                                              [{blue, 0}, {red, 0}]),
-    count_closer(Rest, [{blue, CloserBlue + RowBlue}, {red, CloserRed + RowRed}], VerticalAcc + 1).
+    count_closer(Rest,
+                 BlueHead,
+                 RedHead,
+                 [{blue, CloserBlue + RowBlue}, {red, CloserRed + RowRed}],
+                 VerticalAcc + 1).
 
 
 -spec count_closer_vertical([type:tile()],
-                           type:position(),
-                           type:position(),
-                           type:position(),
-                           CloserCounter) ->
-                           CloserCounter when CloserCounter :: [{blue | red, integer()}, ...].
+                            type:position(),
+                            type:position(),
+                            type:position(),
+                            CloserCounter) ->
+                            CloserCounter when CloserCounter :: [{blue | red, integer()}, ...].
 
 count_closer_vertical([], _BlueHead, _RedHead, _CurrentHead, Acc) ->
     Acc;

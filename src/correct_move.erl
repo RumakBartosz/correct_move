@@ -4,7 +4,8 @@
 
 -ignore_xref([main/1]).
 
-%TODO: eunit (eval), gradualizer, proper evaluation
+% TODO: eunit (eval), gradualizer, proper evaluation
+% TODO: specify same order of arguments in functions (very often color + map)
 
 %%====================================================================
 %% API functions
