@@ -43,7 +43,7 @@ maximize(Color, Map, 0, MyColor) ->
     Eval = evaluation:evaluate(MyColor, Map),
     file:write_file("test.txt" ++ atom_to_list(Color),
                     "Eval from depth maximize: " ++
-                     integer_to_list(Eval) ++
+                     float_to_list(Eval) ++
                      io_lib:nl(), [append]),
     Eval;
 maximize(Color, Map, Depth, MyColor) ->
@@ -53,7 +53,7 @@ maximize(Color, Map, Depth, MyColor) ->
             Eval = evaluation:evaluate(MyColor, Map),
             file:write_file("test.txt" ++ atom_to_list(Color),
                             "Eval from end maximize: " ++
-                             integer_to_list(Eval) ++
+                             float_to_list(Eval) ++
                              io_lib:nl(), [append]),
             Eval;
         false ->
@@ -79,7 +79,7 @@ minimize(Color, Map, 0, MyColor) ->
     Eval = evaluation:evaluate(MyColor, Map),
     file:write_file("test.txt" ++ atom_to_list(Color),
                     "Eval from depth minimize: " ++
-                     integer_to_list(Eval) ++
+                     float_to_list(Eval) ++
                      io_lib:nl(), [append]),
     Eval;
 minimize(Color, Map, Depth, MyColor) ->
@@ -89,7 +89,7 @@ minimize(Color, Map, Depth, MyColor) ->
             Eval = evaluation:evaluate(MyColor, Map),
             file:write_file("test.txt" ++ atom_to_list(Color),
                             "Eval from end minimize: " ++
-                             integer_to_list(Eval) ++
+                             float_to_list(Eval) ++
                              io_lib:nl(), [append]),
             Eval;
         false ->

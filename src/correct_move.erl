@@ -6,6 +6,7 @@
 
 % TODO: eunit (eval), gradualizer, proper evaluation
 % TODO: specify same order of arguments in functions (very often color + map)
+% TODO: get_distance should instead be count_moves_to_place
 
 %%====================================================================
 %% API functions

@@ -12,10 +12,21 @@
 
 evaluate(MyColor, Map) ->
     [{blue, BlueCloser}, {red, RedCloser}] = count_closer(Map),
-    case MyColor =:= blue of
-        true -> BlueCloser/RedCloser;
-        false -> RedCloser/BlueCloser
-    end.
+    DistanceMap = case MyColor =:= blue of
+                      true -> (BlueCloser + 1)/(RedCloser + 1);
+                      false -> (RedCloser + 1)/(BlueCloser + 1)
+                  end,
+    AmIDone = case bot_utility:game_over(MyColor, Map) of
+                  true -> -10;
+                  false -> 0
+              end,
+
+    IsHeDone = case bot_utility:game_over(bot_utility:negate_color(MyColor), Map) of
+                   true -> 10;
+                   false -> 0
+               end,
+
+    DistanceMap + AmIDone + IsHeDone.
 
 %%====================================================================
 %% Internal functions
@@ -41,10 +52,10 @@ count_closer(Map) ->
     count_closer(Map, BlueHead, RedHead, [{blue, 0}, {red, 0}], 1).
 
 
+% TODO: Both functions to refactor
 -spec count_closer(type:tron_map(), type:position(), type:position(), CloserCounter, integer()) ->
                   CloserCounter when CloserCounter :: [{blue | red, integer()}, ...].
 
-% TODO: Both functions to refactor
 count_closer([], _BlueHead, _RedHead, Acc, _VerticalAcc) ->
     Acc;
 count_closer([Row|Rest], BlueHead, RedHead, [{blue, CloserBlue}, {red, CloserRed}], VerticalAcc) ->
@@ -60,6 +71,7 @@ count_closer([Row|Rest], BlueHead, RedHead, [{blue, CloserBlue}, {red, CloserRed
                  VerticalAcc + 1).
 
 
+% TODO: If moves are simultaneous, there should be DistanceToBlue equals DistanceToRed case
 -spec count_closer_vertical([type:tile()],
                             type:position(),
                             type:position(),
@@ -80,12 +92,12 @@ count_closer_vertical([_Tile|Tiles],
         true -> count_closer_vertical(Tiles,
                                     {BlueX, BlueY},
                                     {RedX, RedY},
-                                    {TileX, TileY},
+                                    {TileX + 1, TileY},
                                     [{blue, CloserBlue + 1}, {red, CloserRed}]);
         false -> count_closer_vertical(Tiles,
                                      {BlueX, BlueY},
                                      {RedX, RedY},
-                                     {TileX, TileY},
+                                     {TileX + 1, TileY},
                                      [{blue, CloserBlue}, {red, CloserRed + 1}])
     end.
 
