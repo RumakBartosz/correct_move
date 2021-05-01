@@ -139,3 +139,4 @@ write_map([Head | Rest], Acc, map) ->
     write_map(Rest, [["  " ++ Head ++ "\n"] | Acc], map);
 write_map(MapString, Acc, map_string) ->
     write_map(map_parser:parse(MapString), Acc, map).
+

@@ -11,6 +11,7 @@
 -spec evaluate(type:color(), type:tron_map()) -> integer().
 
 evaluate(MyColor, Map) ->
+    HisColor = bot_utility:negate_color(MyColor),
     [{blue, BlueCloser}, {red, RedCloser}] = count_closer(Map),
     DistanceMap = case MyColor =:= blue of
                       true -> (BlueCloser + 1)/(RedCloser + 1);
@@ -21,12 +22,18 @@ evaluate(MyColor, Map) ->
                   false -> 0
               end,
 
-    IsHeDone = case bot_utility:game_over(bot_utility:negate_color(MyColor), Map) of
+    IsHeDone = case bot_utility:game_over(bot_utility:negate_color(HisColor), Map) of
                    true -> 10;
                    false -> 0
                end,
 
-    DistanceMap + AmIDone + IsHeDone.
+    AreWeTooClose = case get_distance(map_utility:get_head(MyColor, Map),
+                                      map_utility:get_head(HisColor, Map)) == 1 of
+                        true -> -1;
+                        false -> 0
+                    end,
+
+    DistanceMap + AmIDone + IsHeDone + AreWeTooClose.
 
 %%====================================================================
 %% Internal functions

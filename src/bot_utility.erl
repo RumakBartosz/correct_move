@@ -90,4 +90,3 @@ get_mark_tail(red) ->
 get_mark_tail(blue) ->
     "b".
 
-

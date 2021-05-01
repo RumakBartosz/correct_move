@@ -20,3 +20,4 @@
 -type coord() :: pos_integer().
 
 -type position() :: {coord(), coord()}.
+
