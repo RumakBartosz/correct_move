@@ -2,6 +2,19 @@
 
 -export([choose_move/2]).
 
+-ifdef(debug).
+-define(LOG(Map, Color, Eval, Function, Context),
+            file:write_file("test-" ++ atom_to_list(Color) ++ ".txt",
+                            "Eval from " ++ atom_to_list(Function) ++ ": " ++ float_to_list(Eval) ++
+                            " context: " ++ Context ++ io_lib:nl() ++ "For map:"
+                            ++ io_lib:nl(), [append]),
+            map_utility:write_map(Map, "test-" ++ atom_to_list(Color) ++ ".txt")
+       ).
+
+-else.
+-define(LOG(Map, Color, Eval, Function, Context), true).
+
+-endif.
 
 -define(DEFAULT_DEPTH, 7).
 
@@ -12,7 +25,7 @@
 -spec choose_move(type:color(), type:tron_map()) -> type:move().
 
 choose_move(Color, Map) ->
-    {Move, _Value} = which_move_shall_i_take(Map, Color, ?DEFAULT_DEPTH),
+    {Move, _Value} = which_move_shall_i_take(Color, Map, ?DEFAULT_DEPTH),
     Move.
 
 %%====================================================================
@@ -21,7 +34,7 @@ choose_move(Color, Map) ->
 
 -spec which_move_shall_i_take(type:tron_map(), type:color(), integer()) -> {type:move(), integer()}.
 
-which_move_shall_i_take(Map, Color, Depth) ->
+which_move_shall_i_take(Color, Map, Depth) ->
     % Helper function for mapping on all moves
     MoveFun = fun(Move) ->
                      maximize(Color, bot_utility:make_move(Map, Color, Move), Depth, Color)
@@ -39,22 +52,14 @@ which_move_shall_i_take(Map, Color, Depth) ->
 -spec maximize(type:color(), type:tron_map(), integer(), type:color()) -> integer().
 
 maximize(Color, Map, 0, MyColor) ->
-    map_utility:write_map(Map),
     Eval = evaluation:evaluate(MyColor, Map),
-    file:write_file("test.txt" ++ atom_to_list(Color),
-                    "Eval from depth maximize: " ++
-                     float_to_list(Eval) ++
-                     io_lib:nl(), [append]),
+    ?LOG(Map, Color, Eval, ?FUNCTION_NAME, "Depth 0"),
     Eval;
 maximize(Color, Map, Depth, MyColor) ->
     case bot_utility:game_over(Color, Map) of
         true ->
-            map_utility:write_map(Map),
             Eval = evaluation:evaluate(MyColor, Map),
-            file:write_file("test.txt" ++ atom_to_list(Color),
-                            "Eval from end maximize: " ++
-                             float_to_list(Eval) ++
-                             io_lib:nl(), [append]),
+            ?LOG(Map, Color, Eval, ?FUNCTION_NAME, "Depth " ++ integer_to_list(Depth)),
             Eval;
         false ->
             % Helper function for mapping on all moves
@@ -75,22 +80,14 @@ maximize(Color, Map, Depth, MyColor) ->
 -spec minimize(type:color(), type:tron_map(), integer(), type:color()) -> integer().
 
 minimize(Color, Map, 0, MyColor) ->
-    map_utility:write_map(Map),
     Eval = evaluation:evaluate(MyColor, Map),
-    file:write_file("test.txt" ++ atom_to_list(Color),
-                    "Eval from depth minimize: " ++
-                     float_to_list(Eval) ++
-                     io_lib:nl(), [append]),
+    ?LOG(Map, Color, Eval, ?FUNCTION_NAME, "Depth 0"),
     Eval;
 minimize(Color, Map, Depth, MyColor) ->
     case bot_utility:game_over(Color, Map) of
         true ->
-            map_utility:write_map(Map),
             Eval = evaluation:evaluate(MyColor, Map),
-            file:write_file("test.txt" ++ atom_to_list(Color),
-                            "Eval from end minimize: " ++
-                             float_to_list(Eval) ++
-                             io_lib:nl(), [append]),
+            ?LOG(Map, Color, Eval, ?FUNCTION_NAME, "Depth " ++ integer_to_list(Depth)),
             Eval;
         false ->
             % Helper function for mapping on all moves
@@ -99,7 +96,7 @@ minimize(Color, Map, Depth, MyColor) ->
                                    bot_utility:make_move(Map, Color, Move),
                                    Depth - 1,
                                    MyColor)
-                    end,
+                      end,
 
             % Main function, returning lowest value in subtree
             Moves = map_utility:available_moves(Color, Map),

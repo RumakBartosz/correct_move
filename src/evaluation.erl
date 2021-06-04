@@ -22,7 +22,7 @@ evaluate(MyColor, Map) ->
                   false -> 0
               end,
 
-    IsHeDone = case bot_utility:game_over(bot_utility:negate_color(HisColor), Map) of
+    IsHeDone = case bot_utility:game_over(HisColor, Map) of
                    true -> 10;
                    false -> 0
                end,

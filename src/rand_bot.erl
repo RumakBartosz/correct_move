@@ -10,5 +10,8 @@
 
 choose_move(Color, Map) ->
     Moves = map_utility:available_moves(Color, Map),
-    lists:nth(rand:uniform(length(Moves)), Moves).
+    case Moves of
+        [] -> up;
+        _Otherwise -> lists:nth(rand:uniform(length(Moves)), Moves)
+    end.
 

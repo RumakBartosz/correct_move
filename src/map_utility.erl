@@ -2,7 +2,7 @@
 
 -export([available_moves/2,
          print_map/1,
-         write_map/1,
+         write_map/2,
          get_head/2]).
 
 %%====================================================================
@@ -16,12 +16,12 @@ available_moves(Color, Map) ->
         left_valid(Color, Map), right_valid(Color, Map)]).
 
 
--spec write_map(type:tron_map() | string()) -> ok.
+-spec write_map(type:tron_map() | string(), string()) -> ok.
 
-write_map([Head | _Rest] = Map) when is_list(Head) ->
-    write_map(Map, [], map);
-write_map([Head | _Rest] = Map) when is_number(Head) ->
-    write_map(Map, [], map_string).
+write_map([Head | _Rest] = Map, FileName) when is_list(Head) ->
+    write_map(Map, [], FileName, map);
+write_map([Head | _Rest] = Map, FileName) when is_number(Head) ->
+    write_map(Map, [], FileName, map_string).
 
 
 -spec print_map(type:tron_map() | string()) -> ok.
@@ -130,13 +130,13 @@ print_map(MapString, Acc, map_string) ->
     print_map(map_parser:parse(MapString), Acc, map).
 
 
--spec write_map(type:tron_map() | string(), list(), atom()) ->
+-spec write_map(type:tron_map() | string(), list(), string(), atom()) ->
                 ok | {error, badarg | system_limit | terminated | any()}.
 
-write_map([], Acc, map) ->
-    file:write_file("test.txt", lists:reverse(Acc), [append]);
-write_map([Head | Rest], Acc, map) ->
-    write_map(Rest, [["  " ++ Head ++ "\n"] | Acc], map);
-write_map(MapString, Acc, map_string) ->
-    write_map(map_parser:parse(MapString), Acc, map).
+write_map([], Acc, FileName, map) ->
+    file:write_file(FileName, lists:reverse(Acc), [append]);
+write_map([Head | Rest], Acc, FileName, map) ->
+    write_map(Rest, [["  " ++ Head ++ "\n"] | Acc], FileName, map);
+write_map(MapString, Acc, FileName, map_string) ->
+    write_map(map_parser:parse(MapString), FileName, Acc, map).
 

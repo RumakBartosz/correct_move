@@ -5,9 +5,10 @@
 -ignore_xref([main/1]).
 
 % TODO: eunit (eval), gradualizer, proper evaluation
-% TODO: specify same order of arguments in functions (very often color + map)
 % TODO: get_distance should instead be count_moves_to_place
-% TODO: conditional compilation with logging
+% TODO: compilation variable to bot type
+% TODO: compilation variable to eval depth
+% TODO: propEr tests
 
 %%====================================================================
 %% API functions
