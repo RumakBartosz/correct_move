@@ -41,7 +41,7 @@ get_head(Color, Map) ->
 %% Internal functions
 %%====================================================================
 
--spec get_head(type:color(), type:tron_map(), type:coord()) -> type:position() | type:coord().
+-spec get_head(type:color(), type:tron_map(), type:coord()) -> type:position().
 
 get_head(red, [], Acc) ->
     Acc;

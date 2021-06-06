@@ -27,13 +27,7 @@ evaluate(MyColor, Map) ->
                    false -> 0
                end,
 
-    AreWeTooClose = case get_distance(map_utility:get_head(MyColor, Map),
-                                      map_utility:get_head(HisColor, Map)) == 1 of
-                        true -> -1;
-                        false -> 0
-                    end,
-
-    DistanceMap + AmIDone + IsHeDone + AreWeTooClose.
+    DistanceMap + AmIDone + IsHeDone.
 
 %%====================================================================
 %% Internal functions

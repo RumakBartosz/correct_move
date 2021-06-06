@@ -15,7 +15,7 @@
 
 -type move() :: up | down | left | right.
 
--type tron_map() :: [[tile()]].
+-type tron_map() :: [[tile(), ...], ...].
 
 -type coord() :: pos_integer().
 
