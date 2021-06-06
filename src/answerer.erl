@@ -3,6 +3,18 @@
 -export([answer/1,
          answer/2]).
 
+-ifdef(bot).
+    -if(?bot == rand_bot).
+        -define(CURRENT_BOT, rand_bot).
+    -elif(?bot == minimax_bot).
+        -define(CURRENT_BOT, minimax_bot).
+    -else.
+        -define(CURRENT_BOT, minimax_bot).
+    -endif.
+-else.
+    -define(CURRENT_BOT, minimax_bot).
+-endif.
+
 %%====================================================================
 %% API functions
 %%====================================================================
@@ -71,5 +83,5 @@ answer_color("color red" ++ _Terminate) ->
 -spec answer_move(type:color(), type:tron_map()) -> type:move().
 
 answer_move(Color, Map) ->
-    minimax_bot:choose_move(Color, Map).
+    ?CURRENT_BOT:choose_move(Color, Map).
 

@@ -6,9 +6,11 @@
 
 % TODO: eunit (eval), gradualizer, proper evaluation
 % TODO: get_distance should instead be count_moves_to_place
-% TODO: compilation variable to bot type
 % TODO: compilation variable to eval depth
 % TODO: propEr tests
+% TODO: fix all warnings
+% TODO: fix Color warning in LOG
+% TODO: make logging path independent (always in ../log)
 
 %%====================================================================
 %% API functions

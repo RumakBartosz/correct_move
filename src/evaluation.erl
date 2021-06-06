@@ -8,7 +8,7 @@
 %% API functions
 %%====================================================================
 
--spec evaluate(type:color(), type:tron_map()) -> integer().
+-spec evaluate(type:color(), type:tron_map()) -> float().
 
 evaluate(MyColor, Map) ->
     HisColor = bot_utility:negate_color(MyColor),
