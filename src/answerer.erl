@@ -28,7 +28,7 @@ answer(version) ->
 answer(color) ->
     {ok, Color} = answer_color(receive_message()),
     send_message("color ok" ++ terminate()),
-    {ok, Color}.
+    Color.
 
 
 -spec answer(atom(), type:color()) -> ok.
@@ -42,10 +42,10 @@ answer(move, Color) ->
 %% Internal functions
 %%====================================================================
 
--spec send_message(string() | type:move()) -> 'ok'.
+-spec send_message(type:message()) -> ok.
 
 send_message(IO) ->
-    ok = io:format(IO).
+    ok = io:put_chars(IO).
 
 
 -spec receive_message() -> type:message().
@@ -80,8 +80,8 @@ answer_color("color red" ++ _Terminate) ->
     {ok, red}.
 
 
--spec answer_move(type:color(), type:tron_map()) -> type:move().
+-spec answer_move(type:color(), type:tron_map()) -> type:message().
 
 answer_move(Color, Map) ->
-    ?CURRENT_BOT:choose_move(Color, Map).
+    atom_to_list(?CURRENT_BOT:choose_move(Color, Map)).
 

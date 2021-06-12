@@ -121,9 +121,9 @@ right_valid(Color, Map) ->
                (string(), list(), map_string) -> ok.
 
 print_map([], Acc, map) ->
-    io:format("~n"),
-    io:format(lists:reverse(Acc)),
-    io:format("~n");
+    io:put_chars("~n"),
+    io:put_chars(lists:reverse(Acc)),
+    io:put_chars("~n");
 print_map([Head | Rest], Acc, map) ->
     print_map(Rest, [["  " ++ Head ++ "\n"] | Acc], map);
 print_map(MapString, Acc, map_string) ->

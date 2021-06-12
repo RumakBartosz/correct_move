@@ -22,7 +22,7 @@
 main(_Args) ->
     answerer:answer(interface),
     answerer:answer(version),
-    {ok, Color} = answerer:answer(color),
+    Color = answerer:answer(color),
 
     loop(Color).
 

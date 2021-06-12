@@ -71,7 +71,7 @@ alter_map(Map, Tile, {X, Y}) ->
     [alter_vertical(lists:nth(Y, Map), Tile, X)] ++
     lists:nthtail(Y, Map).
 
--spec alter_vertical(string(), string(), type:coord()) -> string().
+-spec alter_vertical(type:tron_map_row(), string(), type:coord()) -> type:tron_map_row().
 
 alter_vertical(Row, Tile, X) ->
     lists:sublist(Row, X - 1) ++ Tile ++ lists:nthtail(X, Row).

@@ -54,7 +54,11 @@ count_closer(Map) ->
 
 
 % TODO: Both functions to refactor
--spec count_closer(type:tron_map(), type:position(), type:position(), CloserCounter, integer()) ->
+-spec count_closer(type:tron_map() | [],
+                   type:position(),
+                   type:position(),
+                   CloserCounter,
+                   type:coord()) ->
                   CloserCounter when CloserCounter :: [{blue | red, integer()}, ...].
 
 count_closer([], _BlueHead, _RedHead, Acc, _VerticalAcc) ->
@@ -73,7 +77,7 @@ count_closer([Row|Rest], BlueHead, RedHead, [{blue, CloserBlue}, {red, CloserRed
 
 
 % TODO: If moves are simultaneous, there should be DistanceToBlue equals DistanceToRed case
--spec count_closer_vertical([type:tile()],
+-spec count_closer_vertical(type:tron_map_row() | [],
                             type:position(),
                             type:position(),
                             type:position(),

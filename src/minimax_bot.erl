@@ -3,17 +3,17 @@
 -export([choose_move/2]).
 
 -ifdef(debug).
--define(LOG(Map, Color, Eval, Function, Context),
-            file:write_file("log/test-" ++ atom_to_list(Color) ++ ".txt",
-                            "Eval from " ++ atom_to_list(Function) ++ ": " ++ float_to_list(Eval) ++
-                            " context: " ++ Context ++ io_lib:nl() ++ "For map:"
+-define(LOG(MAP, COLOR, EVAL, FUNCTION, CONTEXT),
+            file:write_file("log/test-" ++ atom_to_list(COLOR) ++ ".txt",
+                            "Eval from " ++ atom_to_list(FUNCTION) ++ ": " ++ float_to_list(EVAL) ++
+                            " context: " ++ CONTEXT ++ io_lib:nl() ++ "For map:"
                             ++ io_lib:nl(), [append]),
-            map_utility:write_map(Map, "log/test-" ++ atom_to_list(Color) ++ ".txt")
+            map_utility:write_map(MAP, "log/test-" ++ atom_to_list(COLOR) ++ ".txt")
        ).
 
 -else.
--define(LOG(Map, Color, Eval, Function, Context),
-        Color).
+-define(LOG(_MAP, COLOR, _EVAL, _FUNCTION, _CONTEXT),
+            COLOR).
 
 -endif.
 
